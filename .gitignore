@@ -1,0 +1,22 @@
+# Zugangsdaten
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Arbeits- und Ausgabedateien des Schnitts (nur lokal)
+arbeit/
+render/
+projekte/
+*.mp4
+
+# Zwischenspeicher des Kaders (echte Namen der Mannschaft)
+kader_cache.json
+
+# Betriebssystem
+Thumbs.db
+desktop.ini
+.DS_Store

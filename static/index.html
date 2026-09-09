@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Balu-Videoschnitt</title>
+  <link rel="stylesheet" href="/static/schnitt.css" />
+</head>
+<body>
+  <header>
+    <h1>Balu-Videoschnitt</h1>
+    <span id="status-ff" class="status"></span>
+  </header>
+
+  <div id="ffmpeg-warnung" class="warnung" hidden>
+    ffmpeg/ffprobe nicht gefunden. Installieren mit
+    <code>winget install Gyan.FFmpeg</code>, neues Terminal öffnen, Werkzeug neu
+    starten. Oder <code>FFMPEG=</code>/<code>FFPROBE=</code> in der <code>.env</code>.
+  </div>
+
+  <section class="quelle-zeile">
+    <button id="datei-waehlen" class="primaer">🎞 Video wählen …</button>
+    <span id="probe" class="hinweis"></span>
+    <details class="pfad-manuell">
+      <summary>oder Pfad eintippen</summary>
+      <div class="pfad-zeile">
+        <input id="pfad" type="text" placeholder="C:\Videos\Spiel-2026-08-30.mp4" />
+        <button id="laden">Laden</button>
+      </div>
+    </details>
+  </section>
+
+  <main id="editor" hidden>
+    <div id="spiel-leiste" class="spiel-leiste">
+      <form id="spiel-frage" class="spiel-frage">
+        <strong>Was ist das für ein Spiel?</strong>
+        <select id="spiel-art">
+          <option>Testspiel</option>
+          <option>Ligaspiel</option>
+          <option>Pokalspiel</option>
+          <option>Turnier</option>
+          <option>Freundschaftsspiel</option>
+          <option>Training</option>
+        </select>
+        <input id="spiel-gegner" type="text" placeholder="Gegner, z. B. Söflingen" />
+        <input id="spiel-datum" type="date" />
+        <button id="spiel-ok" class="primaer" type="submit">Übernehmen</button>
+      </form>
+      <div id="spiel-kopf" class="spiel-kopf" hidden>
+        <span id="spiel-kopf-text"></span>
+        <button id="spiel-aendern" type="button">ändern</button>
+      </div>
+    </div>
+
+    <div class="buehne-spalte">
+      <div id="buehne" class="buehne">
+        <video id="video" preload="metadata" playsinline></video>
+        <canvas id="canvas" width="1280" height="720"></canvas>
+      </div>
+
+      <div class="transport">
+        <button id="playpause" title="Leertaste">▶︎ / ⏸</button>
+        <button id="frame-zur" title="Komma: ein Bild zurück">◄ Bild</button>
+        <button id="frame-vor" title="Punkt: ein Bild vor">Bild ►</button>
+        <input id="scrub" type="range" min="0" max="100" step="0.001" value="0" />
+        <span id="zeit" class="zeit">0:00 / 0:00</span>
+      </div>
+
+      <div class="in-out">
+        <button id="set-in">[ Start hier</button>
+        <button id="set-out">Ende hier ]</button>
+        <span id="io-anzeige" class="hinweis"></span>
+        <label class="ton-wahl"><input id="ton" type="checkbox" checked /> Ton übernehmen</label>
+      </div>
+
+      <div class="werkzeuge">
+        <div class="wz-gruppe" id="wz-tools">
+          <button data-wz="auswahl" class="aktiv">Auswahl</button>
+          <button data-wz="pfeil">Pfeil</button>
+          <button data-wz="kreis">Kreis</button>
+          <button data-wz="text">Text</button>
+        </div>
+        <div class="wz-gruppe" id="wz-farben"></div>
+        <label class="wz-gruppe">Dicke
+          <input id="dicke" type="range" min="2" max="16" value="6" />
+        </label>
+        <button id="del-sel" class="gefahr">Auswahl löschen</button>
+      </div>
+      <p class="hinweis" id="scope-hinweis"></p>
+    </div>
+
+    <aside class="seiten-spalte">
+      <section class="karte">
+        <h2>Standbilder</h2>
+        <p class="hinweis">Ein Standbild friert das Bild an der aktuellen Stelle
+          ein. Markierungen, die du bei ausgewähltem Standbild zeichnest, gehören
+          nur dorthin.</p>
+        <button id="add-standbild">＋ Standbild an aktueller Stelle</button>
+        <ul id="standbild-liste" class="standbild-liste"></ul>
+        <button id="scope-clip" class="scope-btn aktiv">Ganzer Clip (Markierungen)</button>
+      </section>
+
+      <section class="karte">
+        <h2>Diese Szene</h2>
+        <label>Titel <input id="titel" type="text" placeholder="z. B. Gegenstoß über rechts" /></label>
+        <label>Notiz <textarea id="notiz" rows="2" placeholder="kurzer Hinweis für die Spielerin"></textarea></label>
+        <div class="kader-wahl">
+          <span>Spielerinnen</span>
+          <div id="kader" class="kader-liste"><span class="hinweis">lädt…</span></div>
+          <button id="kader-neu" type="button" hidden>Erneut versuchen</button>
+        </div>
+      </section>
+
+      <section class="karte">
+        <button id="rendern" class="primaer">Rendern</button>
+        <div id="render-status" class="hinweis"></div>
+        <video id="ausgabe" controls playsinline hidden></video>
+        <button id="senden" class="primaer" hidden>An Balu's Training senden</button>
+        <div id="senden-status" class="hinweis"></div>
+      </section>
+
+      <details class="karte">
+        <summary>ffmpeg-Protokoll</summary>
+        <pre id="log" class="log"></pre>
+      </details>
+    </aside>
+  </main>
+
+  <script src="/static/schnitt.js"></script>
+</body>
+</html>
