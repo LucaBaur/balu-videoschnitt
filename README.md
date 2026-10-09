@@ -15,7 +15,7 @@ Spielerinnen die Szene unter „Ich → Videos".
 
 ## Screenshots
 
-<!-- docs/screenshot-*.png — Editor mit geladenem Testvideo und Markierungen -->
+Aufgenommen mit einem Testvideo und erfundenen Demo-Daten.
 
 ![Der Editor](docs/screenshot-editor.png)
 
